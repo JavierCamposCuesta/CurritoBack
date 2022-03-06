@@ -8,6 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
@@ -17,8 +19,9 @@ public class Categoria {
 	private String nombre;
 	private String icono;
 	
-	@OneToMany(cascade = CascadeType.ALL)
-	@JsonManagedReference
+	@OneToMany()
+//	@JsonManagedReference
+	@JsonBackReference
 	private List<Anuncio>listaAnuncios = new ArrayList<Anuncio>();
 	
 	

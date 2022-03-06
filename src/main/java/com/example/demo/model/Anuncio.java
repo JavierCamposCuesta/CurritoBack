@@ -1,20 +1,30 @@
 package com.example.demo.model;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
+import javax.persistence.Basic;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Entity
 public class Anuncio {
 	
@@ -23,36 +33,45 @@ public class Anuncio {
 	private int id;
 	private String titulo;
 	private double precio;
-	private String descripcion;
+	
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
+    @Column(columnDefinition = "Text")
+    private String descripcion;
 	
 //	@OneToMany(cascade = CascadeType.ALL,fetch=FetchType.EAGER,orphanRemoval = true)
 //	private List<String>listaImagenes = new ArrayList<>();
 	
-	@ManyToOne
-	@JsonBackReference
-	private Categoria categoria;
 	
-	@OneToMany(cascade = CascadeType.ALL,fetch=FetchType.EAGER,orphanRemoval = true)
+	private String categoria;
+	
+	@ManyToMany(cascade = CascadeType.ALL,fetch=FetchType.EAGER)
 	@JsonBackReference
 	private List<Usuario>listaSolicitantes = new ArrayList<>();
 	
 	private boolean finalizado = false;
-	private LocalDate fechaAnuncio;
-	private LocalDate fechaFin;
-	private TipoPrecio tipoPrecio;
+	private LocalDateTime fechaAnuncio;
+	private LocalDateTime fechaFin;
+	private String tipoPrecio;
+	private String ubicacion;
+	
+	private boolean enFavoritos = false;
+	
+
+	
+	@ManyToOne(cascade = CascadeType.ALL,fetch=FetchType.EAGER)
+	private Usuario autorAnuncio;
 	
 	public Anuncio() {
 		
 	}
 
-	public Anuncio(String titulo, double precio, String descripcion, Categoria categoria,
-			LocalDate fechaAnuncio, TipoPrecio tipoPrecio) {
+	public Anuncio(String titulo, String categoria,double precio, String tipoPrecio, String descripcion) {
 		super();
 		this.titulo = titulo;
 		this.precio = precio;
 		this.descripcion = descripcion;
 		this.categoria = categoria;
-		this.fechaAnuncio = fechaAnuncio;
 		this.tipoPrecio = tipoPrecio;
 	}
 
@@ -96,11 +115,11 @@ public class Anuncio {
 //		this.listaImagenes = listaImagenes;
 //	}
 
-	public Categoria getCategoria() {
+	public String getCategoria() {
 		return categoria;
 	}
 
-	public void setCategoria(Categoria categoria) {
+	public void setCategoria(String categoria) {
 		this.categoria = categoria;
 	}
 
@@ -120,29 +139,88 @@ public class Anuncio {
 		this.finalizado = finalizado;
 	}
 
-	public LocalDate getFechaAnuncio() {
+	public LocalDateTime getFechaAnuncio() {
+		
 		return fechaAnuncio;
+		
+
+		 
+        
+        
 	}
 
-	public void setFechaAnuncio(LocalDate fechaAnuncio) {
+	public void setFechaAnuncio(LocalDateTime fechaAnuncio) {
 		this.fechaAnuncio = fechaAnuncio;
 	}
 
-	public LocalDate getFechaFin() {
+	public LocalDateTime getFechaFin() {
 		return fechaFin;
 	}
 
-	public void setFechaFin(LocalDate fechaFin) {
+	public void setFechaFin(LocalDateTime fechaFin) {
 		this.fechaFin = fechaFin;
 	}
 
-	public TipoPrecio getTipoPrecio() {
+	public String getTipoPrecio() {
 		return tipoPrecio;
 	}
 
-	public void setTipoPrecio(TipoPrecio tipoPrecio) {
+	public void setTipoPrecio(String tipoPrecio) {
 		this.tipoPrecio = tipoPrecio;
 	}
+
+	public Usuario getAutorAnuncio() {
+		return autorAnuncio;
+	}
+
+	public void setAutorAnuncio(Usuario autorAnuncio) {
+		this.autorAnuncio = autorAnuncio;
+	}
+
+	public String getUbicacion() {
+		return ubicacion;
+	}
+
+	public void setUbicacion(String ubicacion) {
+		this.ubicacion = ubicacion;
+	}
+
+	public boolean isEnFavoritos() {
+		return enFavoritos;
+	}
+
+	public void setEnFavoritos(boolean enFavoritos) {
+		this.enFavoritos = enFavoritos;
+	}
+	
+	
+
+
+	
+	
+	
+	
+	
+	
+
+//	@Override
+//	public int hashCode() {
+//		return Objects.hash(id);
+//	}
+//
+//	@Override
+//	public boolean equals(Object obj) {
+//		if (this == obj)
+//			return true;
+//		if (obj == null)
+//			return false;
+//		if (getClass() != obj.getClass())
+//			return false;
+//		Anuncio other = (Anuncio) obj;
+//		return id == other.id;
+//	}
+	
+	
 	
 	
 	

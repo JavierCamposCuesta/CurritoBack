@@ -36,12 +36,12 @@ public class Comentario {
 		
 	}
 
-	public Comentario(Usuario usuarioComentado, Usuario usuarioComentador, LocalDate fecha, Anuncio anuncio) {
+	public Comentario(Usuario usuarioComentado, Usuario usuarioComentador, LocalDate fecha) {
 		super();
 		this.usuarioComentado = usuarioComentado;
 		this.usuarioComentador = usuarioComentador;
 		this.fecha = fecha;
-		this.anuncio = anuncio;
+//		this.anuncio = anuncio;
 	}
 
 	public int getId() {

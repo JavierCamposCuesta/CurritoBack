@@ -3,14 +3,17 @@ package com.example.demo.model;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 
 
@@ -18,30 +21,60 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class Usuario {
 	
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
+	
 	private String email;
+	
+	//Evita que el campo password se incluya en el JSON de respuesta
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+	private String password;
 	private String nombre;
 	private String apellidos;
 	private String telefono;
 	private LocalDate fechaNacimiento;
 	private String ubicacion;
 	
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(
+//			cascade = CascadeType.ALL, orphanRemoval = true
+			)
 	@JsonIgnore
 	private List<Anuncio>listaFavoritos = new ArrayList<Anuncio>();
 	
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(
+//			cascade = CascadeType.ALL 
+			)
 	@JsonIgnore
 	private List<Anuncio>listaOfertados = new ArrayList<Anuncio>();
 	
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(
+//			cascade = CascadeType.ALL, orphanRemoval = true
+			)
+	@JsonIgnore
+	private List<Anuncio>listaTerminados = new ArrayList<Anuncio>();
+	
+	@OneToMany(
+//			cascade = CascadeType.ALL, orphanRemoval = true
+			)
 	@JsonIgnore
 	private List<Anuncio>listaDemandados = new ArrayList<Anuncio>();
 	
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(
+//			cascade = CascadeType.ALL, orphanRemoval = true
+			)
+	@JsonIgnore
+	private List<Anuncio>listaRealizados = new ArrayList<Anuncio>();
+	
+	@OneToMany(
+			cascade = CascadeType.ALL, orphanRemoval = true
+			)
 	@JsonIgnore
 	private List<Comentario>comentariosPendientes = new ArrayList<>();
 	
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(
+//			cascade = CascadeType.ALL, 
+			orphanRemoval = true
+			)
 	@JsonIgnore
 	private List<Comentario>listaComentarios = new ArrayList<>();
 	
@@ -52,21 +85,38 @@ public class Usuario {
 	public Usuario() {
 		
 	}
+	
+public Usuario(int id) {
+		this.id = id;
+	}
 
-	public Usuario(String email, String nombre, String apellidos, String telefono, LocalDate fechaNacimiento) {
+	
+
+	public Usuario(String email, String password, String nombre, String apellidos, String telefono,
+			 String ubicacion, LocalDate fechaNacimiento) {
 		super();
 		this.email = email;
+		this.password = password;
 		this.nombre = nombre;
 		this.apellidos = apellidos;
 		this.telefono = telefono;
 		this.fechaNacimiento = fechaNacimiento;
+		this.ubicacion = ubicacion;
 	}
 	
-	public Usuario(String email, String nombre, String apellidos) {
+	
+	
+	
+
+
+
+	public Usuario(String email, String password) {
+		super();
 		this.email = email;
-		this.nombre = nombre;
-		this.apellidos = apellidos;
+		this.password = password;
 	}
+
+
 
 	public String getEmail() {
 		return email;
@@ -131,6 +181,20 @@ public class Usuario {
 	public void setListaOfertados(List<Anuncio> listaOfertados) {
 		this.listaOfertados = listaOfertados;
 	}
+	
+	
+
+	public List<Anuncio> getListaTerminados() {
+		return listaTerminados;
+	}
+
+
+
+	public void setListaTerminados(List<Anuncio> listaTerminados) {
+		this.listaTerminados = listaTerminados;
+	}
+
+
 
 	public List<Anuncio> getListaDemandados() {
 		return listaDemandados;
@@ -140,6 +204,19 @@ public class Usuario {
 		this.listaDemandados = listaDemandados;
 	}
 
+	
+	public List<Anuncio> getListaRealizados() {
+		return listaRealizados;
+	}
+
+
+
+	public void setListaRealizados(List<Anuncio> listaRealizados) {
+		this.listaRealizados = listaRealizados;
+	}
+
+
+
 	public String getFotoPerfil() {
 		return fotoPerfil;
 	}
@@ -147,6 +224,79 @@ public class Usuario {
 	public void setFotoPerfil(String fotoPerfil) {
 		this.fotoPerfil = fotoPerfil;
 	}
+
+
+
+	public int getId() {
+		return id;
+	}
+
+
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+
+
+	public String getPassword() {
+		return password;
+	}
+
+
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+
+
+	public List<Comentario> getComentariosPendientes() {
+		return comentariosPendientes;
+	}
+
+
+
+	public void setComentariosPendientes(List<Comentario> comentariosPendientes) {
+		this.comentariosPendientes = comentariosPendientes;
+	}
+
+
+
+	public List<Comentario> getListaComentarios() {
+		return listaComentarios;
+	}
+
+
+
+	public void setListaComentarios(List<Comentario> listaComentarios) {
+		this.listaComentarios = listaComentarios;
+	}
+
+
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(email);
+	}
+
+
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Usuario other = (Usuario) obj;
+		return Objects.equals(email, other.email);
+	}
+	
+	
+	
+	
 	
 	
 	
